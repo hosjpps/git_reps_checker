@@ -146,7 +146,14 @@ export async function POST(request: NextRequest) {
     const llmResponse = await sendToLLM(prompt);
 
     // Parse LLM response
-    const parsedResponse = parseJSONResponse<LLMAnalysisResponse>(llmResponse.content);
+    let parsedResponse: LLMAnalysisResponse;
+    try {
+      parsedResponse = parseJSONResponse<LLMAnalysisResponse>(llmResponse.content);
+    } catch (parseError) {
+      console.error('Failed to parse LLM response:', parseError);
+      console.error('LLM response content (first 2000 chars):', llmResponse.content.slice(0, 2000));
+      throw new Error(`Failed to parse LLM response: ${parseError instanceof Error ? parseError.message : 'Unknown error'}`);
+    }
 
     // Build response
     const response: AnalyzeResponse = {

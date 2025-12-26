@@ -92,17 +92,41 @@ export function parseJSONResponse<T>(content: string): T {
   // Убираем возможные markdown блоки
   let cleaned = content.trim();
 
-  // Удаляем ```json и ``` если есть
-  if (cleaned.startsWith('```')) {
-    cleaned = cleaned.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+  // Удаляем ```json и ``` если есть (многострочно)
+  cleaned = cleaned.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/m, '');
+
+  // Ищем JSON объект в тексте (может быть текст до/после)
+  const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    cleaned = jsonMatch[0];
   }
 
+  // Убираем возможные комментарии в начале/конце
+  cleaned = cleaned.trim();
+
   try {
-    return JSON.parse(cleaned);
+    const parsed = JSON.parse(cleaned);
+    return parsed;
   } catch (error) {
+    // Пробуем найти JSON между первым { и последним }
+    const firstBrace = cleaned.indexOf('{');
+    const lastBrace = cleaned.lastIndexOf('}');
+    
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      try {
+        const extracted = cleaned.substring(firstBrace, lastBrace + 1);
+        return JSON.parse(extracted);
+      } catch (e) {
+        // Продолжаем к основному error handling
+      }
+    }
+
     console.error('JSON Parse Error:', error);
-    console.error('Content:', cleaned.slice(0, 500));
-    throw new Error('Failed to parse LLM response as JSON');
+    console.error('Content length:', cleaned.length);
+    console.error('Content preview (first 1000 chars):', cleaned.slice(0, 1000));
+    console.error('Content preview (last 500 chars):', cleaned.slice(-500));
+    
+    throw new Error(`Failed to parse LLM response as JSON: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
