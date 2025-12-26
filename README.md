@@ -224,6 +224,22 @@ Follow-up вопросы после анализа.
    - `GITHUB_TOKEN` (опционально)
 4. Deploy!
 
+## Тестирование
+
+Подробная инструкция по тестированию: [docs/testing.md](docs/testing.md)
+
+Быстрый старт:
+```bash
+# Локальное тестирование
+npm run dev
+
+# Проверка сборки
+npm run build
+
+# Линтинг
+npm run lint
+```
+
 ## Структура проекта
 
 ```
@@ -245,7 +261,8 @@ Follow-up вопросы после анализа.
 ├── docs/
 │   ├── architecture.md            # Архитектура системы
 │   ├── changelog.md               # История изменений
-│   └── project-status.md          # Статус проекта
+│   ├── project-status.md          # Статус проекта
+│   └── testing.md                 # Инструкция по тестированию
 ├── .env.example
 └── Claude.md                      # Исходное ТЗ
 ```
