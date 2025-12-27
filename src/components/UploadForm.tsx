@@ -174,7 +174,7 @@ export function UploadForm({ files, onFilesChange, onError, disabled }: UploadFo
       >
         <p>Перетащите файлы или ZIP-архив сюда</p>
         <p style={{ fontSize: 14, color: '#888', marginTop: 8 }}>
-          Файлы до 500KB, ZIP до 2MB
+          Файлы до 1MB, ZIP до 5MB
         </p>
         {uploadStatus && (
           <p style={{ fontSize: 14, color: '#0070f3', marginTop: 8 }}>
