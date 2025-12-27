@@ -13,7 +13,9 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(git fetch:*)",
-      "mcp__github__list_commits"
+      "mcp__github__list_commits",
+      "Bash(npm run test:run:*)",
+      "Bash(npm test:*)"
     ]
   }
 }
