@@ -42,9 +42,13 @@ export function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {
 
         return (
           <div key={step.step} className={`progress-step ${status}`}>
-            <div className="progress-step-indicator">
-              {status === 'done' ? '✓' : status === 'active' ? <span className="spinner-small" /> : (index + 1)}
-            </div>
+            {status === 'done' && (
+              <svg className="checkmark" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" />
+              </svg>
+            )}
+            {status === 'active' && <span className="spinner-small" />}
+            {status === 'pending' && <span className="step-number">{index + 1}</span>}
             <span className="progress-step-label">{step.label}</span>
           </div>
         );
@@ -53,56 +57,59 @@ export function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {
       <style jsx>{`
         .progress-indicator {
           display: flex;
-          gap: 8px;
+          gap: 12px;
           align-items: center;
           flex-wrap: wrap;
-          padding: 16px;
-          background: var(--color-canvas-subtle);
-          border-radius: 8px;
-          margin: 16px 0;
+          justify-content: center;
+          padding: 20px;
+          margin: 20px 0;
         }
 
         .progress-step {
           display: flex;
           align-items: center;
-          gap: 6px;
-          padding: 6px 12px;
-          border-radius: 16px;
-          font-size: 13px;
+          gap: 8px;
+          padding: 10px 18px;
+          border-radius: 24px;
+          font-size: 14px;
           transition: all 0.3s ease;
+          white-space: nowrap;
         }
 
         .progress-step.pending {
           color: var(--color-fg-muted);
-          background: var(--color-canvas-default);
+          background: transparent;
         }
 
         .progress-step.active {
-          color: var(--color-accent-fg);
-          background: rgba(88, 166, 255, 0.15);
+          color: #fff;
+          background: #3d444d;
           font-weight: 500;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .progress-step.done {
-          color: var(--color-success-fg);
-          background: rgba(35, 134, 54, 0.15);
+          color: #3fb950;
+          background: rgba(46, 160, 67, 0.15);
+          border: 1px solid rgba(46, 160, 67, 0.4);
         }
 
-        .progress-step-indicator {
-          width: 20px;
-          height: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 11px;
-          font-weight: 600;
+        .step-number {
+          font-weight: 500;
+          font-size: 13px;
+          opacity: 0.7;
+        }
+
+        .checkmark {
+          width: 16px;
+          height: 16px;
         }
 
         .spinner-small {
-          width: 14px;
-          height: 14px;
-          border: 2px solid var(--color-accent-fg);
-          border-top-color: transparent;
+          width: 16px;
+          height: 16px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top-color: #fff;
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
         }
