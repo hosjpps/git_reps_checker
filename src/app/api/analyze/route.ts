@@ -16,6 +16,7 @@ import { buildAnalysisPrompt } from '@/lib/llm/prompts';
 import { sendToLLM, parseAndValidateAnalysisResponse, type LLMAnalysisResponse } from '@/lib/llm/client';
 import { checkRateLimit, getClientIP, RATE_LIMIT_CONFIG } from '@/lib/utils/rate-limiter';
 import { analysisCache, AnalysisCache } from '@/lib/utils/cache';
+import { validateEnv, getMissingEnvVars } from '@/lib/utils/env';
 
 // ===========================================
 // Request Validation
@@ -51,6 +52,27 @@ const AnalyzeRequestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
+
+  // Validate environment variables
+  try {
+    validateEnv();
+  } catch (error) {
+    const missing = getMissingEnvVars();
+    return NextResponse.json(
+      {
+        success: false,
+        error: `Server configuration error: Missing required environment variables: ${missing.join(', ')}`,
+        metadata: {
+          files_analyzed: 0,
+          total_lines: 0,
+          model_used: '',
+          tokens_used: 0,
+          analysis_duration_ms: Date.now() - startTime
+        }
+      } satisfies AnalyzeResponse,
+      { status: 500 }
+    );
+  }
 
   // Rate limiting
   const clientIP = getClientIP(request);

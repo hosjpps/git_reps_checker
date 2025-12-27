@@ -77,9 +77,9 @@ curl -N http://localhost:3000/api/chat/stream \
 
 ## Лимиты
 
-- Файл: max 500KB
-- ZIP: max 2MB
-- Файлов: max 100
+- Файл: max 1MB
+- ZIP: max 5MB
+- Файлов: max 200
 - Rate limit: 5 req/min
 
 ## Vercel

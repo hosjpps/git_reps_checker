@@ -196,7 +196,7 @@ git_reps_checker/
 - Drag & drop загрузка файлов
 - ZIP-архивы через JSZip
 - Фильтрация бинарных файлов
-- Лимиты: 500KB/файл, 2MB/ZIP, 100 файлов
+- Лимиты: 1MB/файл, 5MB/ZIP, 200 файлов
 
 **ProgressIndicator.tsx:**
 - Показывает шаги анализа: uploading → fetching → analyzing → generating
@@ -351,7 +351,7 @@ NEXT_PUBLIC_APP_URL=    # App URL for CORS
 2. **GitHub Tokens** — опциональны, только для приватных репо
 3. **Input Validation** — используем Zod для валидации запросов и ответов LLM
 4. **Rate Limiting** — in-memory rate limiting (5 req/min per IP) + Vercel edge limits
-5. **File Size Limits** — max 500KB на файл, max 2MB для ZIP, max 100 файлов
+5. **File Size Limits** — max 1MB на файл, max 5MB для ZIP, max 200 файлов
 6. **Binary Detection** — автоматическое определение и фильтрация бинарных файлов
 7. **Retry Protection** — exponential backoff с jitter предотвращает перегрузку API
 

@@ -4,10 +4,10 @@ import { useState, useCallback, useRef } from 'react';
 import JSZip from 'jszip';
 import type { FileInput } from '@/types';
 
-// Лимиты файлов
-const MAX_FILE_SIZE = 500 * 1024; // 500KB для отдельных файлов
-const MAX_ZIP_SIZE = 2 * 1024 * 1024; // 2MB для zip-архивов
-const MAX_TOTAL_FILES = 100;
+// Лимиты файлов (увеличены — smart file selector отсеет лишнее)
+const MAX_FILE_SIZE = 1024 * 1024; // 1MB для отдельных файлов
+const MAX_ZIP_SIZE = 5 * 1024 * 1024; // 5MB для zip-архивов
+const MAX_TOTAL_FILES = 200;
 
 // Паттерны для игнорирования
 const IGNORE_PATTERNS = [

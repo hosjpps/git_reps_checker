@@ -53,7 +53,7 @@
 | Task | Status | Notes |
 |------|--------|-------|
 | ZIP archive support | ✅ Done | JSZip, auto-extraction, filters |
-| Increase file limits | ✅ Done | 500KB files, 2MB zip, 100 max |
+| Increase file limits | ✅ Done | 1MB files, 5MB zip, 200 max |
 | Chat history | ✅ Done | Full history + copy buttons |
 | Color legend | ✅ Done | Priorities + categories |
 | GitHub Dark theme | ✅ Done | CSS variables, full redesign |
