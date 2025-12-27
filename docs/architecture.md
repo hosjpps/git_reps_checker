@@ -60,6 +60,8 @@ git_reps_checker/
 │   │   ├── api/
 │   │   │   ├── analyze/
 │   │   │   │   └── route.ts          # POST /api/analyze
+│   │   │   ├── commit-sha/
+│   │   │   │   └── route.ts          # GET /api/commit-sha
 │   │   │   └── chat/
 │   │   │       ├── route.ts          # POST /api/chat
 │   │   │       └── stream/
@@ -92,7 +94,18 @@ git_reps_checker/
 │   │       ├── rate-limiter.ts       # IP-based rate limiting
 │   │       ├── retry.ts              # Exponential backoff retry
 │   │       ├── cache.ts              # In-memory analysis cache (LRU + TTL)
+│   │       ├── env.ts                # Environment validation
 │   │       └── token-counter.ts      # Token estimation
+│   │
+│   ├── hooks/                        # React hooks
+│   │   ├── useLocalStorage.ts        # Persisted state (description, result, chat)
+│   │   └── useAnalysisCache.ts       # Client-side repo analysis cache
+│   │
+│   ├── __tests__/                    # Unit tests (Vitest)
+│   │   ├── analyzers/                # file-selector tests
+│   │   ├── components/               # ProgressIndicator, AnalysisView tests
+│   │   ├── utils/                    # cache, rate-limiter, env, json-parser tests
+│   │   └── setup.ts                  # Test setup with jest-dom
 │   │
 │   └── types/
 │       └── index.ts                  # TypeScript interfaces
@@ -108,6 +121,7 @@ git_reps_checker/
 ├── package.json
 ├── tsconfig.json
 ├── next.config.js
+├── vitest.config.ts                  # Test configuration
 ├── vercel.json                       # Vercel configuration
 └── Claude.md                         # Original task specification
 ```
@@ -183,14 +197,29 @@ git_reps_checker/
 - Автоматический jitter для предотвращения thundering herd
 
 **cache.ts:**
-- In-memory кэширование результатов анализа
+- In-memory кэширование результатов анализа (серверное)
 - `AnalysisCache<T>` — generic LRU cache с TTL
 - `generateKey(repoUrl, commitSha)` — SHA256 ключ из URL + коммита
 - Конфигурация: max 100 записей, TTL 1 час
 - Автоматическая очистка expired записей
 - HTTP заголовки `X-Cache` (HIT/MISS) и `X-Cache-Key`
 
-### 5. React Components (`src/components/`)
+**env.ts:**
+- Валидация переменных окружения при старте
+- `validateEnv()` — проверяет наличие OPENROUTER_API_KEY
+- `getMissingEnvVars()` — список отсутствующих переменных
+
+### 5. Client-side Cache (`src/hooks/useAnalysisCache.ts`)
+
+Клиентское кэширование для персистентности между деплоями Vercel.
+
+- `useAnalysisCache()` — React хук для работы с кэшем
+- Хранит результаты в `localStorage` вместе с `commit_sha`
+- `isCacheValid(repoUrl)` — проверяет актуальность через `/api/commit-sha`
+- TTL: 24 часа
+- Мгновенный результат если репо не изменился (тот же commit SHA)
+
+### 6. React Components (`src/components/`)
 
 **UploadForm.tsx:**
 - Drag & drop загрузка файлов
@@ -227,7 +256,18 @@ git_reps_checker/
 - react-syntax-highlighter с темой oneDark
 - Поддержка code blocks, inline code, списков, ссылок
 
-### 6. API Routes
+### 7. API Routes
+
+**GET /api/commit-sha:**
+```typescript
+Request: ?repo_url=https://github.com/user/repo
+
+Response:
+{
+  sha: string,
+  repo_url: string
+}
+```
 
 **POST /api/analyze:**
 ```typescript

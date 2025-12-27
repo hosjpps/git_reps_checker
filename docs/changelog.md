@@ -9,7 +9,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Planned
-- Deploy to Vercel
+- Integration tests for API endpoints
+
+## [0.3.5] - 2024-12-27
+
+### Added
+- **Client-side caching** for GitHub repos (survives Vercel deployments!)
+  - `useAnalysisCache` hook with localStorage persistence
+  - `/api/commit-sha` endpoint for cache validation
+  - 24-hour TTL on cached results
+  - Instant results if repo hasn't changed (same commit SHA)
+- **Unit tests** — 68 tests with Vitest
+  - Utilities: cache, rate-limiter, JSON parser, env validation
+  - Analyzers: file-selector, token estimation
+  - Components: ProgressIndicator, AnalysisView
+- New metadata fields: `commit_sha`, `repo_url`
+- Streaming chat now shows the actual question (not "...")
+
+### Fixed
+- Upload form now shows correct limits (1MB files, 5MB ZIP)
+- Chat question display during streaming
+
+### Technical
+- Added `src/hooks/useAnalysisCache.ts`
+- Added `src/app/api/commit-sha/route.ts`
+- Added `vitest.config.ts` and test setup
+- Created `src/__tests__/` directory structure
 
 ## [0.3.4] - 2024-12-27
 
