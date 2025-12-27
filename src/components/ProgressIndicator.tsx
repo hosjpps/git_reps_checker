@@ -48,7 +48,6 @@ export function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {
               </svg>
             )}
             {status === 'active' && <span className="spinner-small" />}
-            {status === 'pending' && <span className="step-number">{index + 1}</span>}
             <span className="progress-step-label">{step.label}</span>
           </div>
         );
@@ -92,12 +91,6 @@ export function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {
           color: #3fb950;
           background: rgba(46, 160, 67, 0.15);
           border: 1px solid rgba(46, 160, 67, 0.4);
-        }
-
-        .step-number {
-          font-weight: 500;
-          font-size: 13px;
-          opacity: 0.7;
         }
 
         .checkmark {

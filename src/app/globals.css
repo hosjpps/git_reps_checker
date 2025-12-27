@@ -327,13 +327,13 @@ button:disabled {
   margin-bottom: 8px;
 }
 
-.issue-item.severity-high { border-left: 3px solid var(--accent-red); }
-.issue-item.severity-medium { border-left: 3px solid var(--accent-orange); }
-.issue-item.severity-low { border-left: 3px solid var(--accent-green); }
+.issue-item.severity-high { border-left: 4px solid var(--accent-red); }
+.issue-item.severity-medium { border-left: 4px solid var(--accent-orange); }
+.issue-item.severity-low { border-left: 4px solid var(--accent-green); }
 
-.task-item.priority-high { border-left: 3px solid var(--accent-red); }
-.task-item.priority-medium { border-left: 3px solid var(--accent-orange); }
-.task-item.priority-low { border-left: 3px solid var(--accent-green); }
+.task-item.priority-high { border-left: 4px solid var(--accent-red); }
+.task-item.priority-medium { border-left: 4px solid var(--accent-orange); }
+.task-item.priority-low { border-left: 4px solid var(--accent-green); }
 
 .item-header {
   display: flex;
