@@ -15,6 +15,7 @@ export function ChatSection({ analysis, onError }: ChatSectionProps) {
   const [chatHistory, setChatHistory] = usePersistedChatHistory();
   const [chatLoading, setChatLoading] = useState(false);
   const [streamingAnswer, setStreamingAnswer] = useState('');
+  const [currentStreamingQuestion, setCurrentStreamingQuestion] = useState('');
   const [useStreaming] = useState(true); // Toggle for streaming mode
 
   // Copy to clipboard
@@ -39,6 +40,7 @@ export function ChatSection({ analysis, onError }: ChatSectionProps) {
     setChatLoading(true);
     setChatMessage('');
     setStreamingAnswer('');
+    setCurrentStreamingQuestion(currentQuestion);
 
     try {
       const response = await fetch('/api/chat/stream', {
@@ -79,6 +81,7 @@ export function ChatSection({ analysis, onError }: ChatSectionProps) {
                 answer: fullAnswer
               }]);
               setStreamingAnswer('');
+              setCurrentStreamingQuestion('');
             } else {
               try {
                 const parsed = JSON.parse(data);
@@ -179,7 +182,7 @@ export function ChatSection({ analysis, onError }: ChatSectionProps) {
         <div className="chat-item streaming">
           <div className="chat-question">
             <span className="chat-label">Вопрос:</span>
-            <p>{chatMessage || '...'}</p>
+            <p>{currentStreamingQuestion}</p>
           </div>
           <div className="chat-answer">
             <span className="chat-label">Ответ:</span>
